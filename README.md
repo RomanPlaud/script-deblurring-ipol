@@ -4,6 +4,7 @@ Clone the repo
 ```
 git clone https://github.com/RomanPlaud/script-deblurring-ipol.git
 ```
+
 Install requirements
 ```
 pip install -r requirements.txt
