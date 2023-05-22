@@ -11,7 +11,7 @@ scipy==1.7.3
 seaborn==0.11.2
 setuptools==61.2.0
 thop==0.1.1.post2207130030
-torch==1.12.1+cu116
-torchvision==0.13.1+cu116
+torch
+torchvision
 tqdm==4.64.0
 wandb==0.13.6
