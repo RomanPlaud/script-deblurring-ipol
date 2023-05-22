@@ -18,7 +18,7 @@ def parse_args():
     parser.add_argument('--output_folder', help='path to the output folder', default="output/")
     parser.add_argument('--path_model', help='path to the model', default="weights/deblurring_model.pth")
     parser.add_argument('--device', help='device to use', default="cuda")
-    parser.add_argument('--size_img', help='size of the image', default=[192,192], type=int, nargs='+')
+    parser.add_argument('--size_img', help='size of the image', default=[512,512], type=int, nargs='+')
     parser.add_argument('--method', help='method to use', default="unet")
 
     ## YOLO parameters
