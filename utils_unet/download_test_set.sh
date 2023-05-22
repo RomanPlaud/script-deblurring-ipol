@@ -1,3 +1,12 @@
 #!/bin/bash
 
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1z5BOK-Br6JKFVzikwLlvJ_efE5lPakgp' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1z5BOK-Br6JKFVzikwLlvJ_efE5lPakgp" -O ../test_set/ && rm -rf /tmp/cookies.txt
+FILE_ID="1lkBj2xzikfVxbQ_LGwwTep0POtW8_9lg"
+DESTINATION="test_set.tar"
+
+URL="https://drive.google.com/uc?export=download&id=${FILE_ID}"
+
+wget -O "${DESTINATION}" --no-check-certificate "${URL}"
+
+unzip test_set.tar
+
+rm test_set.tar
