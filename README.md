@@ -44,7 +44,7 @@ python3 main.py \
 
 -``images_folder`` the folder in which are   stored images in which you want to blurr faces. We provide a set a 16 images stored in ``"example_images/"`` (which default folder)
 -``device`` can be set to ``'cpu'`` if no GPU is available\
--``size_img`` correspond to height and width.. By default it is set to ``[512, 512]`` and it is fitted to blurr faces that are not in foreground. If faces are in the foreground you can set ``size_img = [192,192]``.\
+-``size_img`` correspond to height and width.. By default it is set to ``512 512`` and it is fitted to blurr faces that are not in foreground. If faces are in the foreground you can set ``size_img = 192 192``.\
 In any case, it can be changed at your conveinance (but the more the input image is of high resolution the more it will take time to perform inference).
 
 #### Using Yolo method
