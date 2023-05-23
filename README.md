@@ -25,13 +25,13 @@ Images to blurr should be in a folder
 
 #### Using Unet method`
 
-We can run directly but specifications are detailed below\
+We can run directly but specifications are detailed below
 
 ```
 python3 main.py
 ```
 
-With detailed arguments :\ 
+With detailed arguments :
 ```
 python3 main.py \
     --images_folder <path to the folder> \
