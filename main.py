@@ -9,6 +9,7 @@ import os
 from PIL import Image
 from utils_yolo.face_detector import YoloDetector
 import datetime
+from tqdm import trange
 
 
 
@@ -99,12 +100,12 @@ if __name__ == '__main__':
             model = Unet(n_channels=3, pretrained=path_model, backbone=backbone, y_range=y_range, spectral=True)
 
             ## INFERENCE
-            for _ in range(length):
+            for _ in trange(length):
                 success, img = vcapture.read()
                 if not success : 
                     break
                 img = Image.fromarray(img[:,:,[2,1,0]])
-                output = inference(img, model, tuple(args.size_img), args.device)
+                output = inference(img, model, path_save=None, size_img=tuple(args.size_img), device=args.device)
                 vwriter.write(output[:,:,[2,1,0]])
 
             vwriter.release()
@@ -116,7 +117,7 @@ if __name__ == '__main__':
             model = YoloDetector(target_size=args.target_size, device=args.device, min_face=args.min_face)
             
             ## INFERENCE
-            for _ in range(length):
+            for _ in trange(length):
                 success, img = vcapture.read()
                 if not success : 
                     break
