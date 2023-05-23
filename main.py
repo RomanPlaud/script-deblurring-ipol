@@ -14,7 +14,7 @@ from utils_yolo.face_detector import YoloDetector
 def parse_args():
     parser = argparse.ArgumentParser(description='Face Blurring')
 
-    parser.add_argument('--images_folder', help='path to the images folder', default="original_images/")
+    parser.add_argument('--images_folder', help='path to the images folder', default="example_images/")
     parser.add_argument('--output_folder', help='path to the output folder', default="output/")
     parser.add_argument('--path_model', help='path to the model', default="weights/deblurring_model.pth")
     parser.add_argument('--device', help='device to use', default="cuda")
