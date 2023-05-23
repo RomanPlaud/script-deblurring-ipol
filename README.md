@@ -9,9 +9,11 @@ Install requirements
 ```
 pip install -r requirements.txt
 ```
-Download pretrained model
+Download pretrained models
 ```
 bash weights/./download_unet.sh
+bash weights/./download_weights.sh
+
 ```
 perform face blurring 
 ```
