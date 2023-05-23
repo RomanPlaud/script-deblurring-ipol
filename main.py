@@ -28,7 +28,7 @@ def parse_args():
 
     ## Video parameters
     parser.add_argument('--mode_video', help='if you want to perform inference on a video', default=False)
-    parser.add_argument('--video_path', help='path to the video', default='example_videos/vid_test.mp4')
+    parser.add_argument('--video_path', help='path to the video', default='example_videos/vid_example.mp4')
     parser.add_argument('--video_output', help='path to the output video', default="output_videos/")
 
 
