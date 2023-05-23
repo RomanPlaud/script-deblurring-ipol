@@ -46,8 +46,8 @@ python3 main.py \
     --output_folder <path to store results> \
     --device 'cuda' \
     --method 'yolo' \
-    --target_size None\
-    --min_face min_face\
+    --target_size <target size>\
+    --min_face <min face>\
 ```
 -``device`` can be set to ``'cpu'`` if no GPU is available\
 -``target_size`` correspond to height (of a square image) of the size of which we want to rescale input image. By default it is set to ``None`` that means the image is not rescaled to perform inference.\
