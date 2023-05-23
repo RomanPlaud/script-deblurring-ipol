@@ -24,8 +24,11 @@ bash weights/./download_unet.sh
 Images to blurr should be in a folder 
 
 #### Using Unet method
+```
+python3 main.py
 
 ```
+can be ran directly but specifications are detailed below \
 python3 main.py \
     --images_folder <path to the folder> \
     --output_folder <path to store results> \
