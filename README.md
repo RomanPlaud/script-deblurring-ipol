@@ -29,7 +29,6 @@ We can run directly but specifications are detailed below \
 
 ```
 python3 main.py
-
 ```
 
 We detailed arguments : \ 
