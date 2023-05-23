@@ -1,4 +1,3 @@
 weights/deblurring_model.pth
-weights/yolov5n_state_dict.pt
 weights/yolo5m.pt
 weights/yolo5s.pt

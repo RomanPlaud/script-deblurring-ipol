@@ -20,7 +20,7 @@ from utils_yolo.general import check_img_size, non_max_suppression_face, \
     scale_coords,scale_coords_landmarks,filter_boxes
 
 class YoloDetector:
-    def __init__(self, weights_name='yolov5s.pt', config_name='yolov5s.yaml', device='cuda:0', min_face=100, target_size=None, frontal=False):
+    def __init__(self, weights_name='yolov5n_state_dict.pt', config_name='yolov5n.yaml', device='cuda:0', min_face=100, target_size=None, frontal=False):
             """
             weights_name: name of file with network weights in weights/ folder.
             config_name: name of .yaml config with network configuration from models/ folder.
