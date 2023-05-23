@@ -2,7 +2,7 @@
 
 # Overview 
 
-This source code provides a PyTorch implementation of a Unet-like model that directly blurr faces. The code relies of [DeOldify implementattion](http://www.ipol.im/pub/art/2022/403/]
+This source code provides a PyTorch implementation of a Unet-like model that directly blurr faces. The code relies of [DeOldify implementattion](http://www.ipol.im/pub/art/2022/403/)
 
 Clone the repo
 ```
