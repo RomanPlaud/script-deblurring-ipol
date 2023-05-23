@@ -23,12 +23,17 @@ bash weights/./download_unet.sh
 ### perform face blurring 
 Images to blurr should be in a folder 
 
-#### Using Unet method
+#### Using Unet method`
+
+We can run directly but specifications are detailed below \
+
 ```
 python3 main.py
 
 ```
-can be ran directly but specifications are detailed below \
+
+We detailed arguments : \ 
+```
 python3 main.py \
     --images_folder <path to the folder> \
     --output_folder <path to store results> \
