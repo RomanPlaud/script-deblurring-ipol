@@ -27,6 +27,7 @@ def parse_args():
     parser.add_argument('--min_face', help='minimum size of the face', default=0, type=int)
 
     ## Video parameters
+    parser.add_argument('--mode_video', help='if you want to perform inference on a video', default=False)
     parser.add_argument('--video_path', help='path to the video', default=None)
     parser.add_argument('--video_output', help='path to the output video', default="output_videos/")
 
@@ -36,7 +37,7 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
 
-    if args.images_folder is not None:
+    if not args.mode_video:
         ## create output folder 
         if not os.path.exists(args.output_folder):
             os.makedirs(args.output_folder)
@@ -71,8 +72,8 @@ if __name__ == '__main__':
     if args.video_path is not None:
 
         ## create output folder 
-        if not os.path.exists(args.output_videos):
-            os.makedirs(args.output_videos)
+        if not os.path.exists(args.video_output):
+            os.makedirs(args.video_output)
 
         vcapture = cv2.VideoCapture(args.video_path)
         length = int(vcapture.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -98,11 +99,11 @@ if __name__ == '__main__':
 
             ## INFERENCE
             for _ in range(length):
-                success, image = vcapture.read()
+                success, img = vcapture.read()
                 if not success : 
                     break
-                image = Image.fromarray(image[:,:,[2,1,0]])
-                output = inference(image, model, path_save, tuple(args.size_img), args.device)
+                img = Image.fromarray(img[:,:,[2,1,0]])
+                output = inference(img, model, tuple(args.size_img), args.device)
                 vwriter.write(output[:,:,[2,1,0]])
 
             vwriter.release()
@@ -115,11 +116,11 @@ if __name__ == '__main__':
             
             ## INFERENCE
             for _ in range(length):
-                success, image = vcapture.read()
+                success, img = vcapture.read()
                 if not success : 
                     break
-                image = Image.fromarray(image[:,:,[2,1,0]])
-                output = inference_yolo(img, model, path_save)
+                img = Image.fromarray(img[:,:,[2,1,0]])
+                output = inference_yolo(img, model)
                 vwriter.write(output[:,:,[2,1,0]])
                 
             vwriter.release()
