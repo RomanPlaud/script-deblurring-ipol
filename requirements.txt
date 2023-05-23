@@ -1,8 +1,8 @@
 joblib==1.2.0
 matplotlib==3.7.1
-numpy==1.24.3
-pandas==2.0.1
-requests==2.30.0
+numpy==1.23
+pandas==1.5.3
+requests==2.27.1
 scipy==1.10.1
 seaborn==0.12.2
 setuptools==67.7.2
