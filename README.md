@@ -56,7 +56,7 @@ python3 main.py \
     --device 'cuda' \
     --method 'yolo' \
     --target_size <target size>\
-    --min_face <min face>\
+    --min_face <min face>
 ```
 -``device`` can be set to ``'cpu'`` if no GPU is available\
 -``target_size`` correspond to height (of a square image) of the size of which we want to rescale input image. By default it is set to ``None`` that means the image is not rescaled to perform inference.\
@@ -88,7 +88,7 @@ In any case, it can be changed at your conveinance (but the more the input image
     --device 'cuda' \
     --method 'yolo' \
     --target_size <target size>\
-    --min_face <min face>\
+    --min_face <min face>
 ```
 -``device`` can be set to ``'cpu'`` if no GPU is available\
 -``target_size`` correspond to height (of a square image) of the size of which we want to rescale input image. By default it is set to ``None`` that means the image is not rescaled to perform inference.\
