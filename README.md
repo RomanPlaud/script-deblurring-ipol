@@ -6,7 +6,7 @@ This source code provides a PyTorch implementation of a Unet-like model that dir
 
 
 ## Usage
-You should use a python version that is greater than 3.8. This demo works perfectly fine on Google Collab.
+You should use a python version that is greater than 3.8. This demo works perfectly fine on Google Colab, [here](https://github.com/RomanPlaud/script-face-blurring-ipol/blob/master/notebook_colab_demo.ipynb) is a colab notebook demo.
 
 ### Clone the repo
 ```
