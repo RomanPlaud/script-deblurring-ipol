@@ -6,7 +6,7 @@ This source code provides a PyTorch implementation of a Unet-like model that dir
 
 
 ## Usage
-You should use a python version that is greater than 3.8
+You should use a python version that is greater than 3.8. This demo works perfectly fine on Google Collab.
 
 ### Clone the repo
 ```
