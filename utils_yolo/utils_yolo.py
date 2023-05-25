@@ -44,3 +44,5 @@ def inference_yolo(img, model, path_save=None):
     res = np.array(res)
 
     return res
+
+test test 
