@@ -3,14 +3,14 @@ import cv2
 import torch
 from torchvision import models
 from utils_unet.unet import Unet
-from utils_unet.utils_unet import inference
+from utils_unet.utils_unet import inference, inference_multiprocessing
 from utils_yolo.utils_yolo import inference_yolo
 import os
 from PIL import Image
 from utils_yolo.face_detector import YoloDetector
 import datetime
 from tqdm import trange
-
+import numpy as np
 
 
 def parse_args():
@@ -31,6 +31,7 @@ def parse_args():
     parser.add_argument('--mode_video', help='if you want to perform inference on a video', default=False)
     parser.add_argument('--video_path', help='path to the video', default='example_videos/vid_example.mp4')
     parser.add_argument('--video_output', help='path to the output video', default="output_videos/")
+    parser.add_argument('--n_jobs', help='number of jobs to use', default=1, type=int)
 
 
     args = parser.parse_args()
@@ -55,7 +56,8 @@ if __name__ == '__main__':
             for path in os.listdir(args.images_folder):
                 img = Image.open(os.path.join(args.images_folder, path))
                 path_save = os.path.join(args.output_folder, path)
-                _ = inference(img, model, path_save, tuple(args.size_img), args.device)
+                img_result = inference(img, model, tuple(args.size_img), args.device)
+                img_result.save(path_save)
         
         elif args.method == "yolo":
 
@@ -66,7 +68,8 @@ if __name__ == '__main__':
             for path in os.listdir(args.images_folder):
                 img = Image.open(os.path.join(args.images_folder, path))
                 path_save = os.path.join(args.output_folder, path)
-                _ = inference_yolo(img, model, path_save)
+                img_result = inference_yolo(img, model)
+                img_result.save(path_save)
 
         else : 
             raise("Error : Method not implemented")
@@ -100,13 +103,20 @@ if __name__ == '__main__':
             model = Unet(n_channels=3, pretrained=path_model, backbone=backbone, y_range=y_range, spectral=True)
 
             ## INFERENCE
-            for _ in trange(length):
-                success, img = vcapture.read()
-                if not success : 
-                    break
-                img = Image.fromarray(img[:,:,[2,1,0]])
-                output = inference(img, model, path_save=None, size_img=tuple(args.size_img), device=args.device)
-                vwriter.write(output[:,:,[2,1,0]])
+            for _ in trange(0, length, args.n_jobs):
+                imgs = []
+                for _ in range(args.n_jobs):
+                    success, img = vcapture.read()
+                    if not success : 
+                        break
+                    imgs.append(Image.fromarray(img[:,:,[2,1,0]]))
+
+                results = inference_multiprocessing(imgs, model, original_size=dim, 
+                                                    size_img=tuple(args.size_img), device=args.device, n_jobs=args.n_jobs)
+                
+                for result in results:
+                    result = np.array(result)
+                    vwriter.write(result[:,:,[2,1,0]])
 
             vwriter.release()
 
@@ -123,6 +133,7 @@ if __name__ == '__main__':
                     break
                 img = Image.fromarray(img[:,:,[2,1,0]])
                 output = inference_yolo(img, model)
+                output = np.array(output)
                 vwriter.write(output[:,:,[2,1,0]])
                 
             vwriter.release()

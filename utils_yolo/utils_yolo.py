@@ -31,18 +31,11 @@ def blurr_bboxes(image, bboxes, factor=1):
 
     return dst
 
-def inference_yolo(img, model, path_save=None):
+def inference_yolo(img, model):
     
     bboxes, _ = model.predict(np.array(img))
     
     output = blurr_bboxes(np.array(img), bboxes[0])
     res = Image.fromarray(output)
 
-    if path_save is not None:
-        res.save(path_save)
-
-    res = np.array(res)
-
     return res
-
-test test 

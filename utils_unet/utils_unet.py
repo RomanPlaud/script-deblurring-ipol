@@ -1,9 +1,10 @@
 import torch 
 import numpy as np
 from PIL import Image
+import multiprocessing
 
 
-def inference(img, model, path_save=None, size_img=(192, 192), device='cpu'):
+def inference(img, model, size_img=(192, 192), device='cpu'):
 
     dataset_MEAN = torch.Tensor([0.485, 0.456, 0.406])
     dataset_STD = torch.Tensor([0.229, 0.224, 0.225])
@@ -42,12 +43,7 @@ def inference(img, model, path_save=None, size_img=(192, 192), device='cpu'):
     mask_3d = np.repeat(mask_array[:, :, np.newaxis], 3, axis=2).astype(float)
     res = Image.fromarray((res * (1 - mask_3d) + upsample_output * mask_3d).astype(np.uint8))
 
-    if path_save is not None:
-        res.save(path_save)
-    
-    res = np.array(res)
-
-    return res
+    return res 
 
 dataset_MEAN = torch.Tensor([0.485, 0.456, 0.406])
 dataset_STD = torch.Tensor([0.229, 0.224, 0.225])
@@ -98,3 +94,29 @@ def upsampling(input_array, input_img, output, dim):
     res = Image.fromarray((res * (1 - mask_3d) + upsample_output * mask_3d).astype(np.uint8))
 
     return res
+
+
+def inference_multiprocessing(imgs, model, original_size, size_img=(192, 192), device='cpu', n_jobs=1):
+
+    downsampling_img_size = lambda x: downsampling(x, size_img=size_img)
+
+    pool = multiprocessing.Pool(processes=n_jobs)
+
+    results = pool.map(downsampling_img_size, imgs)
+
+    input_img  = torch.cat([x[1] for x in results], dim=0)
+
+    outputs = forward_model(input_img, model, device=device)
+
+    upsampling_img = lambda x, y, z: upsampling(x, y, z, dim=original_size)
+
+    inputs_arrays = [x[0] for x in results]
+    input_imgs = [x[1] for x in results]
+    outputs = [output for output in outputs]
+
+    results = pool.map(upsampling_img, zip(inputs_arrays, input_imgs, outputs))
+
+    pool.close()
+    pool.join()
+
+    return results
