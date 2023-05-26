@@ -2,6 +2,9 @@ import torch
 import numpy as np
 from PIL import Image
 import multiprocessing
+from functools import partial
+from itertools import repeat
+
 
 
 def inference(img, model, size_img=(192, 192), device='cpu'):
@@ -49,15 +52,20 @@ dataset_MEAN = torch.Tensor([0.485, 0.456, 0.406])
 dataset_STD = torch.Tensor([0.229, 0.224, 0.225])
 
 def downsampling(img, size_img=(192, 192)):
+
     
     input_img_org = img.convert('RGB') 
     input_array = np.array(input_img_org)
     w, h, _ = input_array.shape
-    
+    print('ok')
+
     input_img = input_img_org.resize(size_img, resample= Image.BILINEAR)
     input_img = torch.from_numpy(np.array(input_img,dtype=np.float32)).div_(255)
     input_img = input_img.sub_(other=dataset_MEAN).div_(other=dataset_STD)
+    print('ok')
+
     input_img = input_img.permute(2,0,1)[None]
+    print('ok')
 
     return input_array, input_img, (w,h)
 
@@ -98,21 +106,33 @@ def upsampling(input_array, input_img, output, dim):
 
 def inference_multiprocessing(imgs, model, original_size, size_img=(192, 192), device='cpu', n_jobs=1):
 
-    downsampling_img_size = lambda x: downsampling(x, size_img=size_img)
+
+    # downsampling_img_size = partial(downsampling, size_img=size_img)
+
 
     pool = multiprocessing.Pool(processes=n_jobs)
 
-    results = pool.map(downsampling_img_size, imgs)
+    # results = pool.map(downsampling_img_size, imgs)
+    # size_imgs = [size_img]*n_jobs
+    # print(size_imgs)
+    results = pool.starmap(downsampling, zip(imgs, repeat(size_img)))
+
+    pool.close()
+    pool.join()
+
 
     input_img  = torch.cat([x[1] for x in results], dim=0)
 
     outputs = forward_model(input_img, model, device=device)
 
-    upsampling_img = lambda x, y, z: upsampling(x, y, z, dim=original_size)
+    upsampling_img = partial(uspampling, dim=original_size)
 
     inputs_arrays = [x[0] for x in results]
     input_imgs = [x[1] for x in results]
     outputs = [output for output in outputs]
+
+    pool = multiprocessing.Pool(processes=n_jobs)
+
 
     results = pool.map(upsampling_img, zip(inputs_arrays, input_imgs, outputs))
 

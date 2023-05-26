@@ -110,7 +110,7 @@ if __name__ == '__main__':
                     if not success : 
                         break
                     imgs.append(Image.fromarray(img[:,:,[2,1,0]]))
-
+                    
                 results = inference_multiprocessing(imgs, model, original_size=dim, 
                                                     size_img=tuple(args.size_img), device=args.device, n_jobs=args.n_jobs)
                 
