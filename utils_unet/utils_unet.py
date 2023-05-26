@@ -57,15 +57,13 @@ def downsampling(img, size_img=(192, 192)):
     input_img_org = img.convert('RGB') 
     input_array = np.array(input_img_org)
     w, h, _ = input_array.shape
-    print('ok')
 
     input_img = input_img_org.resize(size_img, resample= Image.BILINEAR)
     input_img = torch.from_numpy(np.array(input_img,dtype=np.float32)).div_(255)
     input_img = input_img.sub_(other=dataset_MEAN).div_(other=dataset_STD)
-    print('ok')
 
     input_img = input_img.permute(2,0,1)[None]
-    print('ok')
+
 
     return input_array, input_img, (w,h)
 
@@ -78,6 +76,8 @@ def forward_model(input_imgs, model, device='cpu'):
 
     input_imgs = input_imgs.to(device)
     outputs = model(input_imgs)
+
+    outputs = outputs.detach().cpu()
     
     return outputs
 
@@ -109,7 +109,7 @@ def inference_multiprocessing(imgs, model, original_size, size_img=(192, 192), d
 
     # downsampling_img_size = partial(downsampling, size_img=size_img)
 
-
+    if __name__ == '__main__':
     pool = multiprocessing.Pool(processes=n_jobs)
 
     # results = pool.map(downsampling_img_size, imgs)
