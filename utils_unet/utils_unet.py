@@ -17,8 +17,11 @@ def inference(img, model, path_save=None, size_img=(192, 192), device='cpu'):
     input_img_org = img.convert('RGB') 
     input_array = np.array(input_img_org)
     w, h, _ = input_array.shape
-    
-    input_img = input_img_org.resize(size_img, resample= Image.BILINEAR)
+
+    resizing = ((w, h) != size_img)
+
+    if resizing:
+        input_img = input_img_org.resize(size_img, resample= Image.BILINEAR)
     input_img = torch.from_numpy(np.array(input_img,dtype=np.float32)).div_(255)
     input_img = input_img.sub_(other=dataset_MEAN).div_(other=dataset_STD)
     input_img = input_img.permute(2,0,1)[None]
@@ -31,16 +34,19 @@ def inference(img, model, path_save=None, size_img=(192, 192), device='cpu'):
     printer = printer.mul(255).numpy()
     result = Image.fromarray(printer.astype(np.uint8))
 
-    upsample_output = result.resize((h,w), resample= Image.BILINEAR)
-    upsample_output = np.array(upsample_output)
+    if not resizing: 
+        res = result
+    else : 
+        upsample_output = result.resize((h,w), resample= Image.BILINEAR)
+        upsample_output = np.array(upsample_output)
 
-    mask = Image.fromarray((np.abs((output - input_img).squeeze().detach().cpu().numpy()).sum(axis=0))>0.1)
-    mask = mask.resize((h,w), resample= Image.BILINEAR)
-    mask_array = np.array(mask) 
+        mask = Image.fromarray((np.abs((output - input_img).squeeze().detach().cpu().numpy()).sum(axis=0))>0.1)
+        mask = mask.resize((h,w), resample= Image.BILINEAR)
+        mask_array = np.array(mask) 
 
-    res = input_array.copy()
-    mask_3d = np.repeat(mask_array[:, :, np.newaxis], 3, axis=2).astype(float)
-    res = Image.fromarray((res * (1 - mask_3d) + upsample_output * mask_3d).astype(np.uint8))
+        res = input_array.copy()
+        mask_3d = np.repeat(mask_array[:, :, np.newaxis], 3, axis=2).astype(float)
+        res = Image.fromarray((res * (1 - mask_3d) + upsample_output * mask_3d).astype(np.uint8))
 
     if path_save is not None:
         res.save(path_save)
