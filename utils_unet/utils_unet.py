@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 
 
-def inference(img, model, path_save=None, size_img=(192, 192), device='cpu'):
+def inference(img, model, size_img=(192, 192), device='cpu'):
 
     dataset_MEAN = torch.Tensor([0.485, 0.456, 0.406])
     dataset_STD = torch.Tensor([0.229, 0.224, 0.225])
@@ -41,11 +41,6 @@ def inference(img, model, path_save=None, size_img=(192, 192), device='cpu'):
     res = input_array.copy()
     mask_3d = np.repeat(mask_array[:, :, np.newaxis], 3, axis=2).astype(float)
     res = Image.fromarray((res * (1 - mask_3d) + upsample_output * mask_3d).astype(np.uint8))
-
-    if path_save is not None:
-        res.save(path_save)
-    
-    res = np.array(res)
 
     return res
 
