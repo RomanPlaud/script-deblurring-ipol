@@ -22,6 +22,8 @@ def parse_args():
     parser.add_argument('--device', help='device to use', default="cuda")
     parser.add_argument('--size_img', help='size of the image', default=[512,512], type=int, nargs='+')
     parser.add_argument('--method', help='method to use', default="unet")
+    parser.add_argument('--sa', help='self attention', default=True)
+
 
     ## YOLO parameters
     parser.add_argument('--target_size', help='target size of the image', default=None, type=int)
@@ -32,6 +34,7 @@ def parse_args():
     parser.add_argument('--video_path', help='path to the video', default='example_videos/vid_example.mp4')
     parser.add_argument('--video_output', help='path to the output video', default="output_videos/")
     parser.add_argument('--n_jobs', help='number of jobs to use', default=1, type=int)
+
 
 
     args = parser.parse_args()
@@ -50,7 +53,7 @@ if __name__ == '__main__':
             backbone = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)
             y_range=torch.Tensor([-3.,-3.,-3.]), torch.Tensor([3.,3.,3.])
             path_model = args.path_model
-            model = Unet(n_channels=3, pretrained=path_model, backbone=backbone, y_range=y_range, spectral=True)
+            model = Unet(n_channels=3, pretrained=path_model, backbone=backbone, y_range=y_range, spectral=True, sa=args.sa)
 
             ## INFERENCE
             for path in os.listdir(args.images_folder):
@@ -100,7 +103,8 @@ if __name__ == '__main__':
             backbone = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)
             y_range=torch.Tensor([-3.,-3.,-3.]), torch.Tensor([3.,3.,3.])
             path_model = args.path_model
-            model = Unet(n_channels=3, pretrained=path_model, backbone=backbone, y_range=y_range, spectral=True)
+            print(args.sa)
+            model = Unet(n_channels=3, pretrained=path_model, backbone=backbone, y_range=y_range, spectral=True, sa=args.sa)
 
             ## INFERENCE
             for _ in trange(0, length, args.n_jobs):

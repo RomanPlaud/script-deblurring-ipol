@@ -98,7 +98,7 @@ class Unet(nn.Module):
                          [ 0.61497538, -0.51496512, -0.10001026 ]])
 
     def __init__(self,n_channels=3,y_range=(torch.Tensor([-3.,-3.]),torch.Tensor([3.,3.])),backbone=models.resnet50(weights=models.ResNet50_Weights.DEFAULT),
-                 spectral=False,blur=True,pretrained=None, freeze=True):
+                 spectral=False,blur=True,pretrained=None, freeze=True, sa=True):
         """
         Args:
             n_channels (int): number of channels of the output tensor.
@@ -124,7 +124,7 @@ class Unet(nn.Module):
         self.relu = nn.ReLU(True)
         self.bridge = Bridge(2048,spectral=spectral)
         up_blocks.append(UnetUpBlock(2048,1024,512,spectral=spectral,blur=blur))
-        up_blocks.append(UnetUpBlock(512,512,512,spectral=spectral,blur=blur,self_attention=True))
+        up_blocks.append(UnetUpBlock(512,512,512,spectral=spectral,blur=blur,self_attention=False))
         up_blocks.append(UnetUpBlock(512,256,512,spectral=spectral,blur=blur))
         up_blocks.append(UnetUpBlock(512,64,256,spectral=spectral,blur=blur))
         self.up_blocks = nn.ModuleList(up_blocks)
