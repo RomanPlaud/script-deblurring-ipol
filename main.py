@@ -103,24 +103,17 @@ if __name__ == '__main__':
             backbone = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)
             y_range=torch.Tensor([-3.,-3.,-3.]), torch.Tensor([3.,3.,3.])
             path_model = args.path_model
-            print(args.sa)
             model = Unet(n_channels=3, pretrained=path_model, backbone=backbone, y_range=y_range, spectral=True, sa=args.sa)
 
             ## INFERENCE
-            for _ in trange(0, length, args.n_jobs):
-                imgs = []
-                for _ in range(args.n_jobs):
-                    success, img = vcapture.read()
-                    if not success : 
-                        break
-                    imgs.append(Image.fromarray(img[:,:,[2,1,0]]))
-                    
-                results = inference_multiprocessing(imgs, model, original_size=dim, 
-                                                    size_img=tuple(args.size_img), device=args.device, n_jobs=args.n_jobs)
-                
-                for result in results:
-                    result = np.array(result)
-                    vwriter.write(result[:,:,[2,1,0]])
+            for _ in trange(length):
+                success, img = vcapture.read()
+                if not success : 
+                    break
+                img = Image.fromarray(img[:,:,[2,1,0]])
+                output = inference(img, model, tuple(args.size_img), args.device)
+                output = np.array(output)        
+                vwriter.write(output[:,:,[2,1,0]])
 
             vwriter.release()
 

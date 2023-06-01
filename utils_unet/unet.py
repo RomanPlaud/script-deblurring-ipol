@@ -111,6 +111,7 @@ class Unet(nn.Module):
                 following https://arxiv.org/abs/1806.02658.
         """
         super().__init__()
+        print(sa)
         self.n_channels = n_channels
         down_blocks = list()
         up_blocks = list()
@@ -124,7 +125,7 @@ class Unet(nn.Module):
         self.relu = nn.ReLU(True)
         self.bridge = Bridge(2048,spectral=spectral)
         up_blocks.append(UnetUpBlock(2048,1024,512,spectral=spectral,blur=blur))
-        up_blocks.append(UnetUpBlock(512,512,512,spectral=spectral,blur=blur,self_attention=False))
+        up_blocks.append(UnetUpBlock(512,512,512,spectral=spectral,blur=blur,self_attention=sa))
         up_blocks.append(UnetUpBlock(512,256,512,spectral=spectral,blur=blur))
         up_blocks.append(UnetUpBlock(512,64,256,spectral=spectral,blur=blur))
         self.up_blocks = nn.ModuleList(up_blocks)

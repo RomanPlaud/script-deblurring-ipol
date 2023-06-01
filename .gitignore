@@ -1,8 +1,7 @@
 weights/deblurring_model.pth
 weights/third_phase_wsa.pth
-
 weights/yolo5m.pt
 weights/yolo5s.pt
 output/
 output_videos/
-# test.py
+test.py
