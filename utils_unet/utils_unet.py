@@ -105,19 +105,19 @@ def upsampling(input_array, input_img, output, dim):
 
 
 def inference_multiprocessing(imgs, model, original_size, size_img=(192, 192), device='cpu', n_jobs=1):
+    return None
 
+#     # downsampling_img_size = partial(downsampling, size_img=size_img)
 
-    # downsampling_img_size = partial(downsampling, size_img=size_img)
+#     if __name__ == '__main__':
+#     pool = multiprocessing.Pool(processes=n_jobs)
 
-    if __name__ == '__main__':
-    pool = multiprocessing.Pool(processes=n_jobs)
+#     # results = pool.map(downsampling_img_size, imgs)
+#     # size_imgs = [size_img]*n_jobs
+#     # print(size_imgs)
+#     results = pool.starmap(downsampling, zip(imgs, repeat(size_img)))
 
-    # results = pool.map(downsampling_img_size, imgs)
-    # size_imgs = [size_img]*n_jobs
-    # print(size_imgs)
-    results = pool.starmap(downsampling, zip(imgs, repeat(size_img)))
-
-    pool.close()
+#     pool.close()
     pool.join()
 
 
