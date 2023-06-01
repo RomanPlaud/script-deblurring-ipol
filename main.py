@@ -10,6 +10,7 @@ from PIL import Image
 from utils_yolo.face_detector import YoloDetector
 import datetime
 from tqdm import trange
+import numpy as np
 
 
 
@@ -55,8 +56,9 @@ if __name__ == '__main__':
             for path in os.listdir(args.images_folder):
                 img = Image.open(os.path.join(args.images_folder, path))
                 path_save = os.path.join(args.output_folder, path)
-                _ = inference(img, model, path_save, tuple(args.size_img), args.device)
-        
+                img = inference(img, model, tuple(args.size_img), args.device)
+                img.save(path_save)
+
         elif args.method == "yolo":
 
             ## LOAD NETWORK
@@ -66,7 +68,8 @@ if __name__ == '__main__':
             for path in os.listdir(args.images_folder):
                 img = Image.open(os.path.join(args.images_folder, path))
                 path_save = os.path.join(args.output_folder, path)
-                _ = inference_yolo(img, model, path_save)
+                img = inference_yolo(img, model)
+                img.save(path_save)
 
         else : 
             raise("Error : Method not implemented")
@@ -105,7 +108,8 @@ if __name__ == '__main__':
                 if not success : 
                     break
                 img = Image.fromarray(img[:,:,[2,1,0]])
-                output = inference(img, model, path_save=None, size_img=tuple(args.size_img), device=args.device)
+                output = inference(img, model, size_img=tuple(args.size_img), device=args.device)
+                output = np.array(output)
                 vwriter.write(output[:,:,[2,1,0]])
 
             vwriter.release()
@@ -123,6 +127,7 @@ if __name__ == '__main__':
                     break
                 img = Image.fromarray(img[:,:,[2,1,0]])
                 output = inference_yolo(img, model)
+                output = np.array(output)
                 vwriter.write(output[:,:,[2,1,0]])
                 
             vwriter.release()
