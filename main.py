@@ -103,7 +103,6 @@ if __name__ == '__main__':
             model = Unet(n_channels=3, pretrained=path_model, backbone=backbone, y_range=y_range, spectral=True)
 
             ## INFERENCE
-            times = []
             for _ in trange(length):
                 success, img = vcapture.read()
                 if not success : 
@@ -114,9 +113,6 @@ if __name__ == '__main__':
                 vwriter.write(output[:,:,[2,1,0]])
 
             vwriter.release()
-            times = times[2:]
-            print(np.mean(times), np.std(times), len(times))
-            print(1/np.mean(times))
         
         elif args.method == "yolo":
 
