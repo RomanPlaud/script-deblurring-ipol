@@ -19,7 +19,7 @@ def parse_args():
 
     parser.add_argument('--images_folder', help='path to the images folder', default="example_images/")
     parser.add_argument('--output_folder', help='path to the output folder', default="output/")
-    parser.add_argument('--path_model', help='path to the model', default="weights/deblurring_model.pth")
+    parser.add_argument('--path_model', help='path to the model', default="weights/deblurring_model_mse.pth")
     parser.add_argument('--device', help='device to use', default="cuda")
     parser.add_argument('--size_img', help='size of the image', default=[512,512], type=int, nargs='+')
     parser.add_argument('--method', help='method to use', default="unet")
@@ -103,6 +103,7 @@ if __name__ == '__main__':
             model = Unet(n_channels=3, pretrained=path_model, backbone=backbone, y_range=y_range, spectral=True)
 
             ## INFERENCE
+            times = []
             for _ in trange(length):
                 success, img = vcapture.read()
                 if not success : 
@@ -113,7 +114,9 @@ if __name__ == '__main__':
                 vwriter.write(output[:,:,[2,1,0]])
 
             vwriter.release()
-
+            times = times[2:]
+            print(np.mean(times), np.std(times), len(times))
+            print(1/np.mean(times))
         
         elif args.method == "yolo":
 
