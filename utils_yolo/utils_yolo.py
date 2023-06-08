@@ -32,7 +32,7 @@ def blurr_bboxes(image, bboxes, factor=1):
     return dst
 
 def inference_yolo(img, model):
-    
+
     bboxes, _ = model.predict(np.array(img))
     
     output = blurr_bboxes(np.array(img), bboxes[0])

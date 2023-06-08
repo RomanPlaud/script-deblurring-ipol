@@ -1,5 +1,7 @@
 weights/deblurring_model.pth
-weights/third_phase_wsa.pth
+weights/third_phase_wsa_mse.pth
+weights/third_phase_mse_ell.pth
+
 weights/yolo5m.pt
 weights/yolo5s.pt
 output/

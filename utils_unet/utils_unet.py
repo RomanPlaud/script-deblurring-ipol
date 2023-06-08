@@ -2,7 +2,6 @@ import torch
 import numpy as np
 from PIL import Image
 
-
 def inference(img, model, size_img=(192, 192), device='cpu'):
 
     dataset_MEAN = torch.Tensor([0.485, 0.456, 0.406])
@@ -20,16 +19,18 @@ def inference(img, model, size_img=(192, 192), device='cpu'):
 
     resizing = ((w, h) != size_img)
 
-    if resizing:
+    if resizing:        
         input_img = input_img_org.resize(size_img, resample= Image.BILINEAR)
     else:
         input_img = input_img_org
+
     input_img = torch.from_numpy(np.array(input_img,dtype=np.float32)).div_(255)
     input_img = input_img.sub_(other=dataset_MEAN).div_(other=dataset_STD)
     input_img = input_img.permute(2,0,1)[None]
     input_img = input_img.to(device)
                     
     output = model(input_img)[0]
+
             
     printer = output.detach().cpu().permute(1, 2, 0)
     printer = printer.mul(other=dataset_STD).add(other=dataset_MEAN)
@@ -38,7 +39,8 @@ def inference(img, model, size_img=(192, 192), device='cpu'):
 
     if not resizing: 
         res = result
-    else : 
+        
+    else :      
         upsample_output = result.resize((h,w), resample= Image.BILINEAR)
         upsample_output = np.array(upsample_output)
 
