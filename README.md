@@ -2,7 +2,7 @@
 
 # Overview 
 
-This source code provides a PyTorch implementation of a Unet-like model that directly blur faces. The report we wrote can be found [here](https://github.com/RomanPlaud/script-face-blurring-ipol/blob/master/report_internship_uib.pdf) This part of the code relies of [DeOldify implementation](http://www.ipol.im/pub/art/2022/403/). A Yolo model implementation based on [this repo](https://github.com/elyha7/yoloface) can also be used to blur faces.
+This source code provides a PyTorch implementation of a Unet-like model that directly blur faces. The report we wrote can be found [here](https://github.com/RomanPlaud/script-face-blurring-ipol/blob/master/report_internship_uib.pdf). The code relies on [DeOldify implementation](http://www.ipol.im/pub/art/2022/403/) and [this repo](https://github.com/elyha7/yoloface).
 
 
 ## Usage
